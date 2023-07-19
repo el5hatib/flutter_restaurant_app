@@ -114,9 +114,9 @@ class _MyAppState extends State<MyApp> {
     //home: const CategoriesScreen(),
       routes: {
         '/': (ctx) => const TabsScreen(), // default route
-        CategoryMealsScreen.routeName: (ctx) => const CategoryMealsScreen(),
+        CategoryMealsScreen.routeName: (ctx) =>  CategoryMealsScreen(availableMeals: _availableMeals,),
         MealDetailScreen.routeName: (ctx) => const MealDetailScreen(),
-        FiltersScreen.routeName: (ctx) => FiltersScreen(saveFilters: _setFilters),
+        FiltersScreen.routeName: (ctx) => FiltersScreen(saveFilters: _setFilters, currentFilters:_filters,),
       },
     );
     }
