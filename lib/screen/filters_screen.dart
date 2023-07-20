@@ -31,9 +31,20 @@ Widget _buildSwitchListTile(
     bool currentValue,
   ) {
     return SwitchListTile(
-      title: Text(title),
+      title: Text(title,
+      style: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      )
+      ),
       value: currentValue,
-      subtitle: Text(description),
+      subtitle: Text(description,
+      style: TextStyle(
+        fontSize: 12,
+        color: Colors.grey[400],
+      ),
+      ),
       onChanged: updateValue,
     );
   }

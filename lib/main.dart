@@ -24,42 +24,47 @@ class _MyAppState extends State<MyApp> {
     'vegan': false,
     'vegetarian': false,
   };
+
   void _setFilters(Map<String, bool> filterData) {
     setState(() {
-
       _filters = filterData;
       _availableMeals = dummyMeals.where((meal) {
-        if(_filters['gluten'] == true && !meal.isGlutenFree) {
+        if (_filters['gluten'] == true && !meal.isGlutenFree) {
           return false;
         }
-        if(_filters['lactose'] == true && !meal.isLactoseFree) {
+        if (_filters['lactose'] == true && !meal.isLactoseFree) {
           return false;
         }
-        if(_filters['vegan'] == true && !meal.isVegan) {
+        if (_filters['vegan'] == true && !meal.isVegan) {
           return false;
         }
-        if(_filters['vegetarian'] == true && !meal.isVegetarian) {
+        if (_filters['vegetarian'] == true && !meal.isVegetarian) {
           return false;
         }
         return true;
       }).toList();
     });
   }
+
   List<Meal> _availableMeals = dummyMeals;
-  List<Meal> _favoriteMeals = [];
+  final List<Meal> _favoriteMeals = [];
+
   void _toggleFavorite(String mealId) {
-    final existingIndex = _favoriteMeals.indexWhere((meal) => meal.id == mealId);
-    if(existingIndex >= 0) {
+    final existingIndex =
+        _favoriteMeals.indexWhere((meal) => meal.id == mealId);
+    if (existingIndex >= 0) {
       setState(() {
         _favoriteMeals.removeAt(existingIndex);
       });
-    }
-    else {
+    } else {
       setState(() {
         _favoriteMeals.add(dummyMeals.firstWhere((meal) => meal.id == mealId));
       });
     }
+  }
 
+  bool _isMealFavorite(String id) {
+    return _favoriteMeals.any((meal) => meal.id == id);
   }
 
   @override
@@ -83,47 +88,59 @@ class _MyAppState extends State<MyApp> {
           brightness: Brightness.dark,
         ),
         textTheme: ThemeData.light().textTheme.copyWith(
-          bodyLarge: const TextStyle(
-            color: Color(0xffE6E6FA),
-            fontSize: 18,
-          ),
-          bodyMedium: const TextStyle(
-            color: Color(0xffE6E6FA),
-          ),
-          titleLarge: const TextStyle(
-            fontSize: 26,
-            fontFamily: 'RobotoCondensed',
-            fontWeight: FontWeight.bold,
-            color: Color(0xffE6E6FA),
-          ),
-          titleMedium: const TextStyle(
-            fontSize: 20,
-            fontFamily: 'RobotoCondensed',
-            fontWeight: FontWeight.bold,
-            color: Color(0xffE6E6FA),
-          ),
-
-        ),
+              bodyLarge: const TextStyle(
+                color: Color(0xffE6E6FA),
+                fontSize: 18,
+              ),
+              bodyMedium: const TextStyle(
+                color: Color(0xffE6E6FA),
+              ),
+              titleLarge: const TextStyle(
+                fontSize: 26,
+                fontFamily: 'RobotoCondensed',
+                fontWeight: FontWeight.bold,
+                color: Color(0xffE6E6FA),
+              ),
+              titleMedium: const TextStyle(
+                fontSize: 20,
+                fontFamily: 'RobotoCondensed',
+                fontWeight: FontWeight.bold,
+                color: Color(0xffE6E6FA),
+              ),
+            ),
         appBarTheme: const AppBarTheme(
-          backgroundColor:Color(0xff003D7A),
-          ),
+          backgroundColor: Color(0xff003D7A),
+        ),
         scaffoldBackgroundColor: const Color(0xff051537),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         useMaterial3: true,
       ),
-    //home: const CategoriesScreen(),
+      //home: const CategoriesScreen(),
       routes: {
-        '/': (ctx) => const TabsScreen(), // default route
-        CategoryMealsScreen.routeName: (ctx) =>  CategoryMealsScreen(availableMeals: _availableMeals,),
-        MealDetailScreen.routeName: (ctx) => const MealDetailScreen(),
-        FiltersScreen.routeName: (ctx) => FiltersScreen(saveFilters: _setFilters, currentFilters:_filters,),
+        '/': (ctx) => TabsScreen(
+              favoriteMeals: _favoriteMeals,
+            ),
+        // default route
+        CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(
+              availableMeals: _availableMeals,
+            ),
+        MealDetailScreen.routeName: (ctx) => MealDetailScreen(
+              toggleFavorite: _toggleFavorite,
+              isFavorite: _isMealFavorite,
+            ),
+        FiltersScreen.routeName: (ctx) => FiltersScreen(
+              saveFilters: _setFilters,
+              currentFilters: _filters,
+            ),
       },
     );
-    }
+  }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key,});
+  const MyHomePage({
+    super.key,
+  });
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -135,10 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Meal App"),
       ),
       body: null,

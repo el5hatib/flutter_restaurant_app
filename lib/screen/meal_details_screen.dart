@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:meal_app/dummy_data.dart';
 
 class MealDetailScreen extends StatelessWidget {
-  const MealDetailScreen({super.key});
-
   static const routeName = '/meal-detail';
+  final Function toggleFavorite;
+  final Function isFavorite;
+  const MealDetailScreen({super.key, required this.toggleFavorite, required this.isFavorite});
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,10 +110,10 @@ class MealDetailScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.delete),
-        onPressed: () {
-          Navigator.of(context).pop(mealId);
-        },
+        onPressed: ()=>toggleFavorite(mealId),
+        child:  Icon(
+          isFavorite(mealId) ? Icons.star : Icons.star_border,
+        ),
       ),
     );
   }

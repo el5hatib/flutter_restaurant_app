@@ -1,6 +1,6 @@
 # meal_app
 
-meal app tounderstand  flutter basics
+meal app to understand  flutter basics
 
 ## Getting Started
 
